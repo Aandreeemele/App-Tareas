@@ -249,3 +249,12 @@
     height: 1rem;
     border: 1px solid black;
 }
+.div-bus{
+    height: 2rem;
+    border: 1px solid rgb(110, 108, 108);
+    border-radius: 5px;
+    grid-row: 27/28;
+    grid-column: 3/7;
+    
+    color: rgb(153, 151, 151);
+}

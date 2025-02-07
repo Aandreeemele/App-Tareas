@@ -19,6 +19,11 @@ function createSection() {
         
         section.appendChild(div);
     }
+
+    let newDiv = document.createElement('div');
+    newDiv.className = "div-bus";
+    newDiv.textContent = "Contenido de la tarea.....";
+    section.appendChild(newDiv);
     
     return section;
 }
