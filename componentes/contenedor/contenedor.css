@@ -258,3 +258,21 @@
     
     color: rgb(153, 151, 151);
 }
+.tarea {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.checkbox-tarea {
+    position: relative;
+    left: -15rem;
+    margin-right: 10px;
+    transform: scale(1.2); 
+}
+
+.checked {
+    background-color: rgba(214, 211, 211, 0.418) !important;
+    color: white;
+    text-decoration: line-through;
+}
