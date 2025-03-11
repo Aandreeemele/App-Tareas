@@ -1,56 +1,77 @@
-function createSection() {
-    let section = document.createElement('section');
-    section.className = "section-1";
-    
-    for (let i = 1; i <= 12; i++) {
-        section.appendChild(createTaskElement(i));
+async function fetchTasks() {
+    try {
+        const response = await fetch('http://localhost:3000/tareas');
+        const tasks = await response.json();
+        return tasks;
+    } catch (error) {
+        console.error("Error al obtener tareas:", error);
+        return [];
     }
-
-    let newDiv = document.createElement('div');
-    newDiv.className = "div-bus";
-    newDiv.textContent = "Contenido de la tarea.....";
-    section.appendChild(newDiv);
-
-    let addTaskDiv = document.createElement('div');
-    addTaskDiv.className = "div-special";
-    addTaskDiv.textContent = "Agregar Tarea";
-
-    addTaskDiv.addEventListener('click', () => {
-        let taskCount = section.querySelectorAll('.tarea').length + 1;
-        section.insertBefore(createTaskElement(taskCount), newDiv); // Agregar antes del input de contenido
-    });
-
-    section.appendChild(addTaskDiv);
-    
-    return section;
 }
 
-function createTaskElement(taskNumber) {
+async function addTaskToDatabase(description) {
+    try {
+        const response = await fetch('http://localhost:3000/tareas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ descripcion: description })
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error al agregar tarea:", error);
+    }
+}
+
+function createTaskElement(task) {
     let div = document.createElement('div');
-    div.className = `div-${taskNumber} tarea`;
+    div.className = `div-${task.id} tarea`;
 
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox-tarea';
+    checkbox.checked = task.completada;
 
     let label = document.createElement('label');
-    label.textContent = ` Tarea: ${taskNumber}`;
+    label.textContent = ` ${task.descripcion}`;
 
-    div.addEventListener('click', () => {
-        checkbox.checked = !checkbox.checked; 
-        div.classList.toggle('checked', checkbox.checked); 
+    checkbox.addEventListener('change', async () => {
+        await fetch(`http://localhost:3000/tareas/${task.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completada: checkbox.checked })
+        });
+        div.classList.toggle('checked', checkbox.checked);
     });
-
-
-    checkbox.addEventListener('change', () => {
-        div.classList.toggle('checked', checkbox.checked); 
-    });
-
 
     div.appendChild(checkbox);
     div.appendChild(label);
 
     return div;
+}
+
+async function createSection() {
+    let section = document.createElement('section');
+    section.className = "section-1";
+
+    let tasks = await fetchTasks();
+    tasks.forEach(task => section.appendChild(createTaskElement(task)));
+
+    let addTaskDiv = document.createElement('div');
+    addTaskDiv.className = "div-special";
+    addTaskDiv.textContent = "Agregar Tarea";
+
+    addTaskDiv.addEventListener('click', async () => {
+        let taskDescription = prompt("Ingrese la descripción de la nueva tarea:");
+        if (taskDescription) {
+            let newTask = await addTaskToDatabase(taskDescription);
+            section.appendChild(createTaskElement({ id: newTask.insertId, descripcion: taskDescription, completada: false }));
+        }
+    });
+
+    section.appendChild(addTaskDiv);
+    
+    return section;
 }
 
 export { createSection };
