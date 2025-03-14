@@ -1,24 +1,40 @@
 import { createHeader } from "./componentes/header/header.js";
-import { createFooter } from "./componentes/footer/footer.js";
-import { createSection } from "./componentes/contenedor/data.js";
+import { formulario, crearFormularioTarea } from "./componentes/contenedor/contenedor.js";
+import { crearFormularioLogin } from "./componentes/contenedor/login.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+async function cargarContenidoPrincipal() {
     try {
-        const root = document.querySelector("#root");
-        if (!root) throw new Error("No se encontró el elemento #root");
+        let DOM = document.getElementById("root");
+        if (!DOM) {
+            console.error(" No se encontró el elemento con id 'root'");
+            return;
+        }
 
-        const header = createHeader();
-        root.appendChild(header);
+        DOM.innerHTML = ""; 
+        console.log(' Cargando header...');
+        DOM.appendChild(createHeader());
 
-        const section = await createSection();
-        root.appendChild(section);
+        console.log(' Cargando formulario...');
+        const formularioElement = await formulario(); 
+        DOM.appendChild(formularioElement);
 
-        const footer = createFooter();
-        root.appendChild(footer);
-
-        console.log("DOM cargado exitosamente");
+        console.log(' Cargando formulario de tarea...');
+        DOM.appendChild(crearFormularioTarea());
     } catch (error) {
-        console.error("Error al cargar el DOM:", error);
+        console.error(" Error al cargar el contenido principal:", error);
     }
-});
+}
 
+function cargarDOM() {
+    let DOM = document.getElementById("root");
+    if (!DOM) {
+        console.error(" No se encontró el elemento con id 'root'");
+        return;
+    }
+
+    console.log('s Cargando formulario de login...');
+    const formularioLogin = crearFormularioLogin(cargarContenidoPrincipal); 
+    DOM.appendChild(formularioLogin);
+}
+
+document.addEventListener("DOMContentLoaded", cargarDOM);
