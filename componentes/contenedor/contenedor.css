@@ -20,6 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 .div-2{
     width: 50rem;
@@ -275,4 +276,8 @@
     background-color: rgba(214, 211, 211, 0.418) !important;
     color: white;
     text-decoration: line-through;
+}
+button{
+    position: relative;
+    left: 12rem;
 }
