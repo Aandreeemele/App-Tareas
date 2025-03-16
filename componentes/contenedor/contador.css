@@ -1,0 +1,15 @@
+/* Estilos para las tareas */
+.tarea {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox-tarea {
+    margin-right: 10px;
+}
+
+.checked {
+    text-decoration: line-through;
+    color: gray;
+}
